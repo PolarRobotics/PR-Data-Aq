@@ -12,8 +12,7 @@ ser = serial.Serial(
         timeout  = 1
     )
 
-i = 0
-
+linesWritten = 0
 csvName = ""
 
 while 1:
@@ -29,14 +28,13 @@ while 1:
         # Clear all existing data in opened file
         f = open(csvName, "w+")
         f.close()
-    print("Data acquisition in progress...\nNumber of lines entered = \033[93m", i, "\n\033[41m\033[97mPress ENTER to stop script...\033[0m")
+    print("Data acquisition in progress...\nNumber of lines written = \033[93m", linesWritten, "\n\033[41m\033[97mPress ENTER to stop script...\033[0m")
     
     # Break When Enter is Pressed
     if sys.stdin in select.select([sys.stdin], [], [], 0)[0]:
         line = input()
         print("\033[31mDATA ACQUISITION HALTED. EXITING THE MAINFRAME...")
         break
-    i += 1
 
     # Collect Data from ESP32
     rx_data = ser.readline()
@@ -49,3 +47,4 @@ while 1:
         write_data = rx_data.decode("utf-8")[:-2]
         writer.writerow([now.time(), write_data])
         csvFile.close()
+    linesWritten += 1 
