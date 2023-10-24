@@ -1,10 +1,10 @@
 import serial
 import csv
 import datetime
-import os, select, sys
+import select, sys
 
 ser = serial.Serial(
-        '/dev/ttyUSB0', 
+        '/dev/ttyUSB1', 
         baudrate = 115200, 
         parity   = serial.PARITY_NONE, 
         stopbits = serial.STOPBITS_ONE, 
@@ -15,36 +15,53 @@ ser = serial.Serial(
 linesWritten = 0
 csvName = ""
 
-while 1:
-    # Output Stuff and Break
-    os.system('cls' if os.name == 'nt' else 'clear')
-    print("\033[32mPOLAR ROBOTICS DATA ACQUISITION v1.0")
-    if(csvName == ""):
-        # Input for csv filename
-        print("\033[32mEnter name of file you want data outputted to: ")
-        csvName = input()
-        csvName += ".csv"
+print("\033[32mPOLAR ROBOTICS DATA ACQUISITION v1.0")
 
-        # Clear all existing data in opened file
-        f = open(csvName, "w+")
-        f.close()
-    print("Data acquisition in progress...\nNumber of lines written = \033[93m", linesWritten, "\n\033[41m\033[97mPress ENTER to stop script...\033[0m")
+# Input for csv filename
+print("\033[32mEnter name of file you want data outputted to: \033[97m")
+csvName = input()
+csvName += ".csv"
+
+# Clear all existing data in opened file
+f = open(csvName, "w+")
+f.close()
+
+# Write Headers
+arrayHeaders = []
+
+while 1:
+    if(ser.in_waiting == 0):
+        rx_data = ser.readline()
+        break
+write_data = rx_data.decode("utf-8")[:-1]
+splitTerms = write_data.split(" ,")
+
+print(splitTerms)
+
+for i in splitTerms:
+    arrayHeaders += splitTerms[i % 2 + 1]
     
+
+with open(csvName, newline='',mode='a') as csvFile:
+    writer = csv.writer(csvFile, delimiter=',', escapechar=' ', quoting=csv.QUOTE_NONE)
+    stringHeaders = ",".join(str(x) for x in arrayHeaders)
+    writer.writerow(['Time',stringHeaders])
+
+while 1:
     # Break When Enter is Pressed
     if sys.stdin in select.select([sys.stdin], [], [], 0)[0]:
         line = input()
-        print("\033[31mDATA ACQUISITION HALTED. EXITING THE MAINFRAME...")
+        print("\033[31mDATA ACQUISITION HALTED. EXITING...")
         break
 
     # Collect Data from ESP32
     rx_data = ser.readline()
-    
+    write_data = rx_data.decode("utf-8")[:-1]
+    print(write_data)
+
     # Write to CSV
-    # If you want a new name for the CSV file, change 'SerialMonitor.csv' to what you want.
     with open(csvName, newline='',mode='a') as csvFile:
         now = datetime.datetime.now()
-        writer = csv.writer(csvFile, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
-        write_data = rx_data.decode("utf-8")[:-2]
+        writer = csv.writer(csvFile, delimiter=',', escapechar=' ', quoting=csv.QUOTE_NONE)
         writer.writerow([now.time(), write_data])
-        csvFile.close()
-    linesWritten += 1 
+    linesWritten += 1
