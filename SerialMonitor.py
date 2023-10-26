@@ -14,7 +14,7 @@ def csv_format(rx_data, constant):
 
 
 ser = serial.Serial(
-        '/dev/ttyUSB0', 
+        '/dev/ttyUSB1', 
         baudrate = 115200, 
         parity   = serial.PARITY_NONE, 
         stopbits = serial.STOPBITS_ONE, 
@@ -37,19 +37,8 @@ f = open(csvName, "w+")
 f.close()
 
 ## Write Headers
-
-# buffer = ''
-# while True:
-#     rx_data = b''
-#     rx_data = ser.readline()
-#     buffer += rx_data.decode("utf-9")[:-1]
-#     try:
-#         rx_data = json.loads(buffer)
-#         print(rx_data)
-#         buffer = ''
-#     except json.JSONDecodeError:
-#         time.sleep(0)
-
+# Duplicate is not typo, the first one eliminates readline starting in the middle of text
+rx_data = ser.readline()
 rx_data = ser.readline()
 
 with open(csvName, newline='',mode='a') as csvFile:
