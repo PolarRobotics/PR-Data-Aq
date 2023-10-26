@@ -1,10 +1,20 @@
 import serial
 import csv
 import datetime
-import select, sys
+
+# Function to parse headers / values out of raw data and format it correctly
+# rx_data = the data read from serial in bytes
+# constant = used for remove_every_other
+def csv_format(rx_data, constant):
+    write_data = rx_data.decode("utf-8")[:-1]
+    split_terms = write_data.split(",")
+    every_other_term = split_terms[constant::2]
+    final_data = ",".join(str(x) for x in every_other_term)
+    return final_data
+
 
 ser = serial.Serial(
-        '/dev/ttyUSB1', 
+        '/dev/ttyUSB0', 
         baudrate = 115200, 
         parity   = serial.PARITY_NONE, 
         stopbits = serial.STOPBITS_ONE, 
@@ -26,42 +36,33 @@ csvName += ".csv"
 f = open(csvName, "w+")
 f.close()
 
-# Write Headers
-arrayHeaders = []
+## Write Headers
 
-while 1:
-    if(ser.in_waiting == 0):
-        rx_data = ser.readline()
-        break
-write_data = rx_data.decode("utf-8")[:-1]
-splitTerms = write_data.split(" ,")
+# buffer = ''
+# while True:
+#     rx_data = b''
+#     rx_data = ser.readline()
+#     buffer += rx_data.decode("utf-9")[:-1]
+#     try:
+#         rx_data = json.loads(buffer)
+#         print(rx_data)
+#         buffer = ''
+#     except json.JSONDecodeError:
+#         time.sleep(0)
 
-print(splitTerms)
-
-for i in splitTerms:
-    arrayHeaders += splitTerms[i % 2 + 1]
-    
+rx_data = ser.readline()
 
 with open(csvName, newline='',mode='a') as csvFile:
     writer = csv.writer(csvFile, delimiter=',', escapechar=' ', quoting=csv.QUOTE_NONE)
-    stringHeaders = ",".join(str(x) for x in arrayHeaders)
-    writer.writerow(['Time',stringHeaders])
+    writer.writerow(['Time',csv_format(rx_data, 0)])
 
 while 1:
-    # Break When Enter is Pressed
-    if sys.stdin in select.select([sys.stdin], [], [], 0)[0]:
-        line = input()
-        print("\033[31mDATA ACQUISITION HALTED. EXITING...")
-        break
-
     # Collect Data from ESP32
     rx_data = ser.readline()
-    write_data = rx_data.decode("utf-8")[:-1]
-    print(write_data)
 
     # Write to CSV
     with open(csvName, newline='',mode='a') as csvFile:
-        now = datetime.datetime.now()
         writer = csv.writer(csvFile, delimiter=',', escapechar=' ', quoting=csv.QUOTE_NONE)
-        writer.writerow([now.time(), write_data])
+        now = datetime.datetime.now()
+        writer.writerow([now.time(), csv_format(rx_data,1)])
     linesWritten += 1
