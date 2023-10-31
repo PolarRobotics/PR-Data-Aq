@@ -1,7 +1,8 @@
 from flask import Flask, render_template
-import SerialMonitor
+import static.py.SerialMonitor as SerialMonitor
 
 app = Flask(__name__)
+app.debug = True
 
 @app.route('/')
 def index():
