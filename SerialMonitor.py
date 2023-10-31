@@ -15,7 +15,7 @@ def csv_format(rx_data, constant):
     final_data = ",".join(str(x) for x in every_other_term)
     return final_data
 
-def __main__():
+def main():
     # Serial Setup
     # Change port variable to directory of USB/GPIO port to ESP32
     port = '/dev/ttyUSB1'
@@ -28,11 +28,11 @@ def __main__():
             timeout  = 1
         )
 
-    csvName = ""
-
+    # Title of Program
     print("\033[32mPOLAR ROBOTICS DATA ACQUISITION v1.0")
 
     # Input for csv filename
+    csvName = ""
     print("\033[32mEnter name of file you want data outputted to: \033[97m")
     csvName = input()
     csvName += ".csv"
@@ -41,7 +41,7 @@ def __main__():
     f = open(csvName, "w+")
     f.close()
 
-    ## Write Headers
+    # Write Headers
     # Duplicate is not typo, the first one eliminates readline starting in the middle of text
     rx_data = ser.readline()
     rx_data = ser.readline()
@@ -61,4 +61,4 @@ def __main__():
             writer.writerow([now.time(), csv_format(rx_data,1)])
 
 if __name__ == "__main__":
-    __main__()
+    main()
