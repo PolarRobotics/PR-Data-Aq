@@ -4,6 +4,7 @@
 import serial
 import csv
 import datetime
+from Flask import session
 
 # Function to parse headers / values out of raw data and format it correctly
 # rx_data = the data read from serial in bytes
@@ -15,10 +16,10 @@ def csv_format(rx_data, constant):
     final_data = ",".join(str(x) for x in every_other_term)
     return final_data
 
-def main():
+def main(csv_filename, session):
     # Serial Setup
     # Change port variable to directory of USB/GPIO port to ESP32
-    port = '/dev/ttyUSB1'
+    port = '/dev/ttyUSB0'
     ser = serial.Serial(
             port, 
             baudrate = 115200, 
@@ -33,8 +34,7 @@ def main():
 
     # Input for csv filename
     csvName = ""
-    print("\033[32mEnter name of file you want data outputted to: \033[97m")
-    csvName = input()
+    csvName = csv_filename
     csvName += ".csv"
 
     # Clear all existing data in opened file
@@ -51,6 +51,8 @@ def main():
         writer.writerow(['Time',csv_format(rx_data, 0)])
 
     while 1:
+        if session.get('stop_loop'):
+            break
         # Collect Data from ESP32
         rx_data = ser.readline()
 

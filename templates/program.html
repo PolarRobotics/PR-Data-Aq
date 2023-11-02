@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>{% block title %} {{ program['title'] }} {% endblock %}</h1>
+    <form id="loopForm" action="/serial_monitor" method="POST">
+        CSV Filename: 
+        <input type="text" name="csv_filename"></input>
+        .csv<br>
+        <input type="submit" name="start" value="Start Program">
+        <input type="submit" name="stop" value="Stop Program">
+        <input type="hidden" name="action" id="formAction">
+    </form> 
+    
+    <script>
+    $(document).ready(function() {
+        $('#loopForm').submit(function(event) {
+            event.preventDefault();
+            var url = '';
+
+            if (event.originalEvent.submitter.name === 'start') {
+                url = '/serial_monitor';
+                $('#formAction').val('start');
+            } else if (event.originalEvent.submitter.name === 'stop') {
+                url = '/stop_serial_monitor';
+                $('#formAction').val('stop');
+            }
+
+            var formData = $(this).serialize();
+            console.log(formData);
+
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: formData,
+                success: function(response) {
+                    console.log(response);
+                },
+                error: function(error) {
+                    console.log(error);
+                }
+            });
+        });
+    });
+    </script>
+    <h2>CSV</h2>
+    <a href="/">
+        <button>Download CSV File</button>
+    </a>
+    <h2>Graphing</h2>
+    <a href="/">
+        <button>Create Graph</button>
+    </a>
+    <a href="/">
+        <button>Save Graph to Database</button>
+    </a>
+    <a href="/">
+        <button>Open Graph Database</button>
+    </a>
+{% endblock %}
