@@ -1,47 +1,55 @@
 {% extends 'base.html' %}
 
+{% block title %}
+    Serial Monitor to CSV
+{% endblock %}
+
 {% block content %}
     <h2>Serial Monitor to CSV</h2>
-    <form id="loopForm" action="/serial_monitor" method="POST">
+    <form id="loopForm" action="/start_serial_monitor" method="POST">
         <div style="display: flex; align-items: center;">
-            <label for="csv_filename">CSV Filename: </label>
+            <label for="csv_filename">Enter CSV Filename for output: </label>
             <input type="text" id="csv_filename" name="csv_filename"></input>
             <span>.csv</span>
         </div>
-        <input type="submit" name="start" value="Start Program">
-        <input type="submit" name="stop" value="Stop Program">
-        <input type="hidden" name="action" id="formAction">
+        <input type="submit" name="start_button" value="Start Program">
+        <input type="submit" name="stop_button" value="Stop Program">
+        <input type="hidden" name="action" id="action">
     </form> 
     <script>
-    $(document).ready(function() {
-        $('#loopForm').submit(function(event) {
-            event.preventDefault();
-            var url = '';
+        $(document).ready(function() {
+            $('input[name="start_button"]').click(function(e) {
+                e.preventDefault();
+                $('#action').val('start');
+                $('#loopForm').submit();
+            });
 
-            if (event.originalEvent.submitter.name === 'start') {
-                url = '/serial_monitor';
-                $('#formAction').val('start');
-            } else if (event.originalEvent.submitter.name === 'stop') {
-                url = '/stop_serial_monitor';
-                $('#formAction').val('stop');
-            }
-
-            var formData = $(this).serialize();
-            console.log(formData);
-
-            $.ajax({
-                type: 'POST',
-                url: url,
-                data: formData,
-                success: function(response) {
-                    console.log(response);
-                },
-                error: function(error) {
-                    console.log(error);
-                }
+            $('input[name="stop_button"]').click(function(e) {
+                e.preventDefault();
+                $('#action').val('stop');
+                $('#loopForm').submit();
+            });
+            
+            $('#loopForm').submit(function(event) {
+                event.preventDefault();
+                
+                var url = '/start_serial_monitor';
+                var formData = $(this).serialize();
+                console.log(formData);
+        
+                $.ajax({
+                    type: 'POST',
+                    url: url,
+                    data: formData,
+                    success: function(response) {
+                        console.log(response);
+                    },
+                    error: function(error) {
+                        console.log(error);
+                    }
+                });
             });
         });
-    });
     </script>
     <h2>CSV</h2>
     <a href="/">

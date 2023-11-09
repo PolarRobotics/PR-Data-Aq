@@ -1,20 +1,22 @@
 <!doctype html>
-<html lang="en" data-bs-theme="dark">
+<html lang="en">
   <head>
       <!-- Required meta tags -->
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
       <!-- CSS Stylesheet -->
       <link rel="stylesheet" href="/static/css/styles.css">
-  </head>
-  <body>
-    <header style="background-color: #f0f0f0; padding: 10px;">
+      <!-- jQuery -->
+      <script src="/static/js/jquery.min.js"></script>
+      <header style="background-color: chocolate; padding: 10px;">
         <img id="favicon" src="/static/favicon.ico" alt="Favicon">
         <h1>Polar Robotics Web Interface</h1>
-    </header>
-    <nav style="background-color: orange; padding: 10px;">
-        <a href="/" style="margin-right: 15px; color: white; text-decoration: none;">Home</a>
-        <a href="/serial_monitor" style="color: white; text-decoration: none;">Serial Monitor</a>
+      </header>
+    </head>
+  <body>
+    <nav>
+        <a href="/">Home</a>
+        <a href="/serial_monitor">Serial Monitor</a>
     </nav>
     <div class="container">
         {% block content %} {% endblock %}

@@ -23,12 +23,13 @@ def serial_monitor():
 @app.route('/start_serial_monitor', methods=['GET', 'POST'])
 def start_serial_monitor():
     print(request.form)
-    if request.form['action'] == 'start':
+    action = request.form.get('action')
+    if action == 'start':
         csv_filename = request.form['csv_filename']
         SerialMonitor.main(csv_filename, session)
         session['stop_program'] = False
         return "Started serial monitor"
-    elif request.form['action'] == 'stop':
+    elif action == 'stop':
         session['stop_loop'] = True
         return "Stopped serial monitor"
     return "No action"
