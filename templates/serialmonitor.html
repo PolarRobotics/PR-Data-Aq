@@ -1,16 +1,17 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <h1>{% block title %} {{ program['title'] }} {% endblock %}</h1>
+    <h2>Serial Monitor to CSV</h2>
     <form id="loopForm" action="/serial_monitor" method="POST">
-        CSV Filename: 
-        <input type="text" name="csv_filename"></input>
-        .csv<br>
+        <div style="display: flex; align-items: center;">
+            <label for="csv_filename">CSV Filename: </label>
+            <input type="text" id="csv_filename" name="csv_filename"></input>
+            <span>.csv</span>
+        </div>
         <input type="submit" name="start" value="Start Program">
         <input type="submit" name="stop" value="Stop Program">
         <input type="hidden" name="action" id="formAction">
     </form> 
-    
     <script>
     $(document).ready(function() {
         $('#loopForm').submit(function(event) {

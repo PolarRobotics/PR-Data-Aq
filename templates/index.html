@@ -1,12 +1,8 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <h1>{% block title %} Polar Robotics Web Interface {% endblock %}</h1>
-    {% for program in programs %}
-    <a href="{{ url_for('program', program_id=program['id']) }}">
-        <button>{{ program['title'] }}</button>
+    <h2>Programs</h2>
+    <a href="serial_monitor">
+        <button>Serial Monitor to CSV</button>
     </a>
-    <span class="badge badge-primary">{{ programs['created'] }}</span>
-    <hr>
-    {% endfor %}
-{% endblock %} 
+{% endblock %}

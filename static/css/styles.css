@@ -1,0 +1,80 @@
+html, body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f0f0f0;
+}
+
+header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 15px;
+    background-color: #f0f0f0;
+}
+
+#favicon {
+    height: 30px;
+    width: 30px; 
+    margin-right: 10px;
+}
+
+h1 {
+    margin: 0;
+    color: #333;
+}
+
+h2 {
+    color: #333;
+}
+
+.container {
+    width: 80%;
+    margin: auto;
+    overflow: hidden;
+}
+
+a {
+    text-decoration: none;
+}
+
+button, input[type="submit"] {
+    background-color: #4CAF50; /* Green */
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+}
+
+form input[type="text"] {
+    width: 25%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    box-sizing: border-box;
+    border: 3px solid #ccc;
+    -webkit-transition: 0.5s;
+    transition: 0.5s;
+    outline: none;
+}
+
+form input[type="text"]:focus {
+    border: 3px solid #555;
+}
+
+nav {
+    display: flex;
+    justify-content: flex-start;
+    padding: 15px;
+    background-color: orange;
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+    margin-right: 10px;
+}
