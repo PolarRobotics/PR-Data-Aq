@@ -4,7 +4,6 @@
 import serial
 import csv
 import datetime
-from Flask import session
 
 # Function to parse headers / values out of raw data and format it correctly
 # rx_data = the data read from serial in bytes
