@@ -1,4 +1,4 @@
-# SerialMonitor.py - Corbin Hibler - 30 October 2023
+# SerialMonitor.py - Corbin Hibler - 2023-10-30
 # Python script to convert serial communications from Polar Robotics ESP32
 # into a CSV file with headers
 import serial
@@ -49,6 +49,7 @@ def main(csv_filename, session):
         writer = csv.writer(csvFile, delimiter=',', escapechar=' ', quoting=csv.QUOTE_NONE)
         writer.writerow(['Time',csv_format(rx_data, 0)])
 
+    # Data Recording
     while 1:
         if session.get('stop_loop'):
             break
