@@ -4,20 +4,32 @@
 import serial
 import csv
 import datetime
+from flask import session
 
-# Function to parse headers / values out of raw data and format it correctly
-# rx_data = the data read from serial in bytes
-# constant = used for remove_every_other
 def csv_format(rx_data, constant):
+    """
+    Function to parse headers / values out of raw data and format it correctly.
+
+    Parameters:
+    rx_data (bytes): The data read from serial in bytes
+    constant (int): Which every other term you want removed
+
+    Returns:
+    str: The combined string with commas that will be written in the CSV file
+    """
     write_data = rx_data.decode("utf-8")[:-1]
     split_terms = write_data.split(",")
     every_other_term = split_terms[constant::2]
     final_data = ",".join(str(x) for x in every_other_term)
     return final_data
+csv_filename = "Test"
 
-def main(csv_filename, session):
+def main(csv_filename):
     # Serial Setup
-    # Change port variable to directory of USB/GPIO port to ESP32
+    # Change port variable to directory of USB/GPIO port to ESP32:
+        # 'dev/ttyUSB0' for USB Port 0 on Linux/Mac Devices
+        # 'dev/ttyUSB1' for USB Port 1 on Linux/Mac Devices
+        # 'dev/ttyAMA0' for GPIO Port on Raspberry Pi
     port = '/dev/ttyUSB0'
     ser = serial.Serial(
             port, 
@@ -27,9 +39,6 @@ def main(csv_filename, session):
             bytesize = serial.EIGHTBITS, 
             timeout  = 1
         )
-
-    # Title of Program
-    print("\033[32mPOLAR ROBOTICS DATA ACQUISITION v1.0")
 
     # Input for csv filename
     csvName = ""

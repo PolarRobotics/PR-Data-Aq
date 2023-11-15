@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Serial Monitor to CSV
+{% endblock %}
+
+{% block content %}
+    <h2>Serial Monitor to CSV</h2><!--Page header-->
+    <!--Form to start/stop serial monitor and give CSV file output-->
+    <form id="loopForm" action="/start_serial_monitor" method="POST">
+        <div style="display: flex; align-items: center;"><!--Styling for form content-->
+            <!--Label and input for CSV filename-->
+            <label for="csv_filename">Enter CSV Filename for output: </label>
+            <input type="text" id="csv_filename" name="csv_filename"></input>
+            <span>.csv</span>
+        </div>
+        <!--Start and Stop buttons-->
+        <input type="submit" name="start_button" value="Start Program">
+        <input type="submit" name="stop_button" value="Stop Program">
+        <!--Hidden field for action value that gets passed to JavaScript-->
+        <input type="hidden" name="action" id="action">
+    </form>
+    <!--Link to JavaScript to process above form and run SerialMonitor.py (VERY IMPORTANT)-->
+    <script src="/static/js/serialMonitorForm.js"></script>
+    <!--Header for CSV management section-->
+    <h2>CSV</h2>
+        <!--Button to download the CSV file-->
+        <a href="/">
+            <button>Download CSV File</button>
+        </a>
+    <!--Header for Graphing section-->
+    <h2>Graphing</h2>
+        <a href="/">
+            <button>Create Graph</button>
+        </a>
+        <a href="/">
+            <button>Save Graph to Database</button>
+        </a>
+        <a href="/">
+            <button>Open Graph Database</button>
+        </a>
+{% endblock %}
