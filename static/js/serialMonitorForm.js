@@ -6,6 +6,7 @@ $(document).ready(function() {
 
     // When the start button is clicked
     $('input[name="start_button"]').click(function(e) {
+        document.getElementById("programStatus").textContent = "Program running...";
         // Prevent the default form submission
         e.preventDefault();
         // Set the action to 'start'
@@ -16,6 +17,8 @@ $(document).ready(function() {
 
     // When the stop button is clicked
     $('input[name="stop_button"]').click(function(e) {
+        document.getElementById("programStatus").textContent = "Program STOPPED.";
+        document.getElementById("savedCsvName").textContent = "Saved CSV File saved to "
         // Prevent the default form submission
         e.preventDefault();
         // Set the action to 'stop'
@@ -48,6 +51,9 @@ $(document).ready(function() {
             success: function(response) {
                 // Log the response for debugging
                 console.log(response);
+
+                // Display the CSV path to the user
+                document.getElementById("savedCsvName").textContent = "CSV File saved to " + response.csv_path;
             },
             // The function to run when the request fails
             error: function(error) {

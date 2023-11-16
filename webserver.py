@@ -3,9 +3,11 @@
 
 # Import necessary libraries (Python modules)
 import os
-from flask import Flask, render_template, request, session, send_from_directory
+import signal
+from flask import Flask, render_template, request, session, send_from_directory, jsonify
 from werkzeug.exceptions import abort
-import static.py.serial_monitor as serial_monitor
+from static.py import serial_monitor
+from multiprocessing import Process
 
 # Initialize Flask app with secret key and debug mode
 app = Flask(__name__)
@@ -14,7 +16,7 @@ app.debug = True
 
 # Define route for the home/index page
 @app.route('/')
-def index():
+def index_page():
     return render_template('index.html')
 
 # Define route for the favicon
@@ -26,7 +28,7 @@ def favicon():
 
 # Define route for the serial monitor page
 @app.route('/serial_monitor')
-def serial_monitor():
+def serial_monitor_page():
     return render_template('serial-monitor.html')
 
 # Define route for starting the serial monitor, accepting both GET and POST requests
@@ -34,26 +36,28 @@ def serial_monitor():
 def start_serial_monitor():
     # Print the form data for debugging (comment out if needed)
     print(request.form)
-
-    # Get the action from the form data
-    action = request.form.get('action')
-
-    #Start Serial Monitor
-    if action == 'start':
-        # Get the CSV filename from the form data
-        csv_filename = request.form['csv_filename']
-        # Call the main function of the SerialMonitor module
-        serial_monitor.main(csv_filename)
-        session['stop_loop'] = False
-        return "Started serial monitor"
+    # Get the CSV filename from the form data
+    csv_filename = request.form['csv_filename']
+    # Call the main function of the SerialMonitor module
+    csv_path = serial_monitor.main(csv_filename)
+    # Create a new process that runs the main function
+    p = Process(target=serial_monitor.main, args=(csv_filename))
+    # Start the process
+    p.start()
+    # Store the process ID in the session
+    session['pid'] = p.pid
     
-    # Stop Serial Monitor
-    elif action == 'stop':
-        session['stop_loop'] = True
-        return "Stopped serial monitor"
-    
-    # If no action was provided (Error case!)
-    return "No action"
+    return jsonify({'message': "Started serial monitor", 'csv_path': csv_path})
+
+# Stop Serial Monitor
+@app.route('/stop_serial_monitor', methods=['GET', 'POST'])
+def stop_serial_monitor():
+    # Get the process ID from the session
+    pid = session.get('pid')
+    if pid is not None:
+        # Send the SIGTERM signal to the process
+        os.kill(pid, signal.SIGTERM)
+    return jsonify({'message': "Stopped serial monitor"})
 
 # If this script is run directly (not imported)
 if __name__ == '__main__':

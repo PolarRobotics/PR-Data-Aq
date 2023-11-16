@@ -15,19 +15,29 @@
             <span>.csv</span>
         </div>
         <!--Start and Stop buttons-->
-        <input type="submit" name="start_button" value="Start Program">
-        <input type="submit" name="stop_button" value="Stop Program">
+        <input type="submit" href="/start_serial_monitor"name="start_button" value="Start Program">
+        <input type="submit" href="/stop_serial_monitor" name="stop_button" value="Stop Program">
         <!--Hidden field for action value that gets passed to JavaScript-->
-        <input type="hidden" name="action" id="action">
     </form>
     <!--Link to JavaScript to process above form and run SerialMonitor.py (VERY IMPORTANT)-->
     <script src="/static/js/serialMonitorForm.js"></script>
+    <h3>Program Status</h3>
+        <label id="programStatus">Program not running.</label><br>
+        <label id="savedCsvName"></label>
+    
     <!--Header for CSV management section-->
     <h2>CSV</h2>
-        <!--Button to download the CSV file-->
-        <a href="/">
-            <button>Download CSV File</button>
-        </a>
+    <!--Button to download the CSV file-->
+    <form id="csvForm" action="" method="POST">
+        <div style="display: flex; align-items: center;"><!--Styling for form content-->
+            <!--Label and input for CSV filename-->
+            <label for="csv_filename">Enter CSV Filename to be downloaded: </label>
+            <input type="text" id="csv_filename" name="csv_filename"></input>
+            <span>.csv</span>
+        </div>
+        <!--Start and Stop buttons-->
+        <input type="submit" name="download_csv" value="Download CSV File">
+    </form>
     <!--Header for Graphing section-->
     <h2>Graphing</h2>
         <a href="/">

@@ -2,9 +2,26 @@
 # Python script to convert serial communications from Polar Robotics ESP32
 # into a CSV file with headers
 import serial
+import os
 import csv
 import datetime
+import signal
+import sys
 from flask import session
+
+csvName = ""
+
+def signal_handler(sig, frame):
+    # Close open files
+    if csvName.is_open:
+        csvName.close()
+
+    # Log that we're shutting down
+    print("Received signal to terminate. Shutting down...")
+
+    sys.exit(0)
+
+signal.signal(signal.SIGTERM, signal_handler)
 
 def csv_format(rx_data, constant):
     """
@@ -22,7 +39,7 @@ def csv_format(rx_data, constant):
     every_other_term = split_terms[constant::2]
     final_data = ",".join(str(x) for x in every_other_term)
     return final_data
-csv_filename = "Test"
+
 
 def main(csv_filename):
     # Serial Setup
@@ -41,9 +58,11 @@ def main(csv_filename):
         )
 
     # Input for csv filename
-    csvName = ""
     csvName = csv_filename
     csvName += ".csv"
+
+    # Get the full path of the CSV file
+    csvFullPath = os.path.abspath(csvName)
 
     # Clear all existing data in opened file
     f = open(csvName, "w+")
@@ -59,9 +78,7 @@ def main(csv_filename):
         writer.writerow(['Time',csv_format(rx_data, 0)])
 
     # Data Recording
-    while 1:
-        if session.get('stop_loop'):
-            break
+    while True:
         # Collect Data from ESP32
         rx_data = ser.readline()
 
@@ -70,6 +87,13 @@ def main(csv_filename):
             writer = csv.writer(csvFile, delimiter=',', escapechar=' ', quoting=csv.QUOTE_NONE)
             now = datetime.datetime.now()
             writer.writerow([now.time(), csv_format(rx_data,1)])
+
+        # Write to CSV
+        with open(csvName, newline='',mode='a') as csvFile:
+            writer = csv.writer(csvFile, delimiter=',', escapechar=' ', quoting=csv.QUOTE_NONE)
+            now = datetime.datetime.now()
+            writer.writerow([now.time(), csv_format(rx_data,1)])   
+    return csvFullPath
 
 if __name__ == "__main__":
     main()
