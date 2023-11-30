@@ -11,28 +11,19 @@ $(document).ready(function() {
         e.preventDefault();
         // Set the action to 'start'
         $('#action').val('start');
-        // The URL to send the request to
-        var url = '/start_serial_monitor';
-        // Serialize the form data for the AJAX request
-        var formData = $('#loopForm').serialize();
-        // Log the form data for debugging
-        console.log(formData);
-
+        
         // Make an AJAX request
         $.ajax({
             // The type of request (POST)
             type: 'POST',
             // The URL to send the request to
-            url: url,
+            url: '/start_serial_monitor',
             // The data to send with the request
-            data: formData,
+            data: $('#loopForm').serialize(),
             // The function to run when the request is successful
             success: function(response) {
                 // Log the response for debugging
                 console.log(response);
-
-                // Display the CSV path to the user
-                document.getElementById("savedCsvName").textContent = "CSV File saved to " + response.csv_path;
             },
             // The function to run when the request fails
             error: function(error) {
@@ -49,21 +40,15 @@ $(document).ready(function() {
         e.preventDefault();
         // Set the action to 'stop'
         $('#action').val('stop');
-        // The URL to send the request to
-        var url = '/stop_serial_monitor';
-        // Serialize the form data for the AJAX request
-        var formData = $('#loopForm').serialize();
-        // Log the form data for debugging
-        console.log(formData);
 
         // Make an AJAX request
         $.ajax({
             // The type of request (POST)
             type: 'POST',
             // The URL to send the request to
-            url: url,
+            url: '/stop_serial_monitor',
             // The data to send with the request
-            data: formData,
+            data: $('#loopForm').serialize(),
             // The function to run when the request is successful
             success: function(response) {
                 // Log the response for debugging
