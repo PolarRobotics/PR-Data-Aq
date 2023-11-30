@@ -42,12 +42,16 @@ def csv_format(rx_data, constant):
 
 
 def main(csv_filename):
+    # Process ID information
+    pid = os.getpid()
+    print(f"Started process with ID {pid}")
+
     # Serial Setup
     # Change port variable to directory of USB/GPIO port to ESP32:
         # 'dev/ttyUSB0' for USB Port 0 on Linux/Mac Devices
         # 'dev/ttyUSB1' for USB Port 1 on Linux/Mac Devices
         # 'dev/ttyAMA0' for GPIO Port on Raspberry Pi
-    port = '/dev/ttyUSB0'
+    port = '/dev/ttyACM0'
     ser = serial.Serial(
             port, 
             baudrate = 115200, 
@@ -93,7 +97,7 @@ def main(csv_filename):
             writer = csv.writer(csvFile, delimiter=',', escapechar=' ', quoting=csv.QUOTE_NONE)
             now = datetime.datetime.now()
             writer.writerow([now.time(), csv_format(rx_data,1)])   
-    return csvFullPath
+    return csvFullPath, pid
 
 if __name__ == "__main__":
     main()

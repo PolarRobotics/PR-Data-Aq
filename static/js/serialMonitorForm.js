@@ -11,6 +11,10 @@ $(document).ready(function() {
         e.preventDefault();
         // Set the action to 'start'
         $('#action').val('start');
+        // The URL to send the request to
+        var url = '/stop_serial_monitor';
+        // Serialize the form data for the AJAX request
+        var formData = $(this).serialize();
         // Submit the form
         $('#loopForm').submit();
     });
@@ -23,17 +27,8 @@ $(document).ready(function() {
         e.preventDefault();
         // Set the action to 'stop'
         $('#action').val('stop');
-        // Submit the form
-        $('#loopForm').submit();
-    });
-    
-    // When the form is submitted
-    $('#loopForm').submit(function(event) {
-        // Prevent the default form submission
-        event.preventDefault();
-        
         // The URL to send the request to
-        var url = '/start_serial_monitor';
+        var url = '/stop_serial_monitor';
         // Serialize the form data for the AJAX request
         var formData = $(this).serialize();
         // Log the form data for debugging

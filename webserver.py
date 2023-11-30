@@ -31,33 +31,48 @@ def favicon():
 def serial_monitor_page():
     return render_template('serial-monitor.html')
 
+# Global Variable to store process ID
+pid = None
+
 # Define route for starting the serial monitor, accepting both GET and POST requests
 @app.route('/start_serial_monitor', methods=['GET', 'POST'])
 def start_serial_monitor():
+    global pid
     # Print the form data for debugging (comment out if needed)
     print(request.form)
     # Get the CSV filename from the form data
     csv_filename = request.form['csv_filename']
     # Call the main function of the SerialMonitor module
-    csv_path = serial_monitor.main(csv_filename)
+    csv_path, pid = serial_monitor.main(csv_filename)
+    # Store the CSV path and process ID in the session
+    session['csv_path'] = csv_path
+    session['pid'] = pid
     # Create a new process that runs the main function
-    p = Process(target=serial_monitor.main, args=(csv_filename))
+    p = Process(target=serial_monitor.main, args=(csv_filename,))
     # Start the process
     p.start()
-    # Store the process ID in the session
-    session['pid'] = p.pid
-    
+    # Store the process ID and CSV path
+    pid = p.pid
+    csv_path = os.path.join(os.getcwd(), f"{csv_filename}.csv")
+    session['csv_path'] = csv_path
     return jsonify({'message': "Started serial monitor", 'csv_path': csv_path})
 
 # Stop Serial Monitor
 @app.route('/stop_serial_monitor', methods=['GET', 'POST'])
 def stop_serial_monitor():
-    # Get the process ID from the session
-    pid = session.get('pid')
+    global pid
     if pid is not None:
-        # Send the SIGTERM signal to the process
-        os.kill(pid, signal.SIGTERM)
-    return jsonify({'message': "Stopped serial monitor"})
+        print(f"Stopping process with ID {pid}")
+        try:
+            # Send the SIGTERM signal to the process
+            os.kill(pid, signal.SIGTERM)
+            message = "Stopped serial monitor"
+        except Exception as e:
+            print(f"Failed to stop process: {e}")
+            message = f"Failed to stop serial monitor: {e}"
+    else:
+        message = "No process ID found"
+    return jsonify({'message': message, 'csv_path': session.get('csv_path')})
 
 # If this script is run directly (not imported)
 if __name__ == '__main__':
