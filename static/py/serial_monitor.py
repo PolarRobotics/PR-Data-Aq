@@ -2,26 +2,8 @@
 # Python script to convert serial communications from Polar Robotics ESP32
 # into a CSV file with headers
 import serial
-import os
 import csv
 import datetime
-import signal
-import sys
-from flask import session
-
-csvName = ""
-
-def signal_handler(sig, frame):
-    # Close open files
-    if csvName.is_open:
-        csvName.close()
-
-    # Log that we're shutting down
-    print("Received signal to terminate. Shutting down...")
-
-    sys.exit(0)
-
-signal.signal(signal.SIGTERM, signal_handler)
 
 def csv_format(rx_data, constant):
     """
@@ -42,16 +24,12 @@ def csv_format(rx_data, constant):
 
 
 def main(csv_filename):
-    # Process ID information
-    pid = os.getpid()
-    print(f"Started process with ID {pid}")
-
     # Serial Setup
     # Change port variable to directory of USB/GPIO port to ESP32:
         # 'dev/ttyUSB0' for USB Port 0 on Linux/Mac Devices
         # 'dev/ttyUSB1' for USB Port 1 on Linux/Mac Devices
         # 'dev/ttyAMA0' for GPIO Port on Raspberry Pi
-    port = '/dev/ttyACM0'
+    port = '/dev/ttyUSB0'
     ser = serial.Serial(
             port, 
             baudrate = 115200, 
@@ -62,11 +40,9 @@ def main(csv_filename):
         )
 
     # Input for csv filename
+    csvName = ""
     csvName = csv_filename
     csvName += ".csv"
-
-    # Get the full path of the CSV file
-    csvFullPath = os.path.abspath(csvName)
 
     # Clear all existing data in opened file
     f = open(csvName, "w+")
@@ -97,7 +73,7 @@ def main(csv_filename):
             writer = csv.writer(csvFile, delimiter=',', escapechar=' ', quoting=csv.QUOTE_NONE)
             now = datetime.datetime.now()
             writer.writerow([now.time(), csv_format(rx_data,1)])   
-    return csvFullPath, pid
+    return None
 
 if __name__ == "__main__":
     main()

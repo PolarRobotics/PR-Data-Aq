@@ -7,17 +7,16 @@
 {% block content %}
     <h2>Serial Monitor to CSV</h2><!--Page header-->
     <!--Form to start/stop serial monitor and give CSV file output-->
-    <form id="loopForm" action="/start_serial_monitor" method="POST">
-        <div style="display: flex; align-items: center;"><!--Styling for form content-->
-            <!--Label and input for CSV filename-->
+    <form id="loopForm">
+        <div2>
+            <!--CSV filename input field-->
             <label for="csv_filename">Enter CSV Filename for output: </label>
             <input type="text" id="csv_filename" name="csv_filename"></input>
             <span>.csv</span>
-        </div>
+        </div2>
         <!--Start and Stop buttons-->
-        <input type="submit" href="/start_serial_monitor"name="start_button" value="Start Program">
-        <input type="submit" href="/stop_serial_monitor" name="stop_button" value="Stop Program">
-        <!--Hidden field for action value that gets passed to JavaScript-->
+        <input type="submit" name="start_button" value="Start Program">
+        <input type="submit" name="stop_button" value="Stop Program">
     </form>
     <!--Link to JavaScript to process above form and run SerialMonitor.py (VERY IMPORTANT)-->
     <script src="/static/js/serialMonitorForm.js"></script>
@@ -29,12 +28,12 @@
     <h2>CSV</h2>
     <!--Button to download the CSV file-->
     <form id="csvForm" action="" method="POST">
-        <div style="display: flex; align-items: center;"><!--Styling for form content-->
+        <div2>
             <!--Label and input for CSV filename-->
             <label for="csv_filename">Enter CSV Filename to be downloaded: </label>
             <input type="text" id="csv_filename" name="csv_filename"></input>
             <span>.csv</span>
-        </div>
+        </div2>
         <!--Start and Stop buttons-->
         <input type="submit" name="download_csv" value="Download CSV File">
     </form>

@@ -12,17 +12,39 @@ $(document).ready(function() {
         // Set the action to 'start'
         $('#action').val('start');
         // The URL to send the request to
-        var url = '/stop_serial_monitor';
+        var url = '/start_serial_monitor';
         // Serialize the form data for the AJAX request
-        var formData = $(this).serialize();
-        // Submit the form
-        $('#loopForm').submit();
+        var formData = $('#loopForm').serialize();
+        // Log the form data for debugging
+        console.log(formData);
+
+        // Make an AJAX request
+        $.ajax({
+            // The type of request (POST)
+            type: 'POST',
+            // The URL to send the request to
+            url: url,
+            // The data to send with the request
+            data: formData,
+            // The function to run when the request is successful
+            success: function(response) {
+                // Log the response for debugging
+                console.log(response);
+
+                // Display the CSV path to the user
+                document.getElementById("savedCsvName").textContent = "CSV File saved to " + response.csv_path;
+            },
+            // The function to run when the request fails
+            error: function(error) {
+                // Log the error for debugging
+                console.log(error);
+            }
+        });
     });
 
     // When the stop button is clicked
     $('input[name="stop_button"]').click(function(e) {
         document.getElementById("programStatus").textContent = "Program STOPPED.";
-        document.getElementById("savedCsvName").textContent = "Saved CSV File saved to "
         // Prevent the default form submission
         e.preventDefault();
         // Set the action to 'stop'
@@ -30,7 +52,7 @@ $(document).ready(function() {
         // The URL to send the request to
         var url = '/stop_serial_monitor';
         // Serialize the form data for the AJAX request
-        var formData = $(this).serialize();
+        var formData = $('#loopForm').serialize();
         // Log the form data for debugging
         console.log(formData);
 
