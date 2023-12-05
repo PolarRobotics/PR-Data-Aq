@@ -3,9 +3,16 @@
 
 // Wait for the document to be ready
 $(document).ready(function() {
+    // Hide the stop button initially
+    $('input[name="stop_button"]').hide();
 
     // When the start button is clicked
     $('input[name="start_button"]').click(function(e) {
+        // Hide the start button and show the stop button
+        $('input[name="start_button"]').hide();
+        $('input[name="stop_button"]').show();
+        // Clear the savedCsvName label and populate programStatus label
+        document.getElementById("savedCsvName").textContent = "";
         document.getElementById("programStatus").textContent = "Program running...";
         // Prevent the default form submission
         e.preventDefault();
@@ -35,6 +42,9 @@ $(document).ready(function() {
 
     // When the stop button is clicked
     $('input[name="stop_button"]').click(function(e) {
+        // Hide the stop button and show the start button
+        $('input[name="stop_button"]').hide();
+        $('input[name="start_button"]').show();
         document.getElementById("programStatus").textContent = "Program STOPPED.";
         // Prevent the default form submission
         e.preventDefault();

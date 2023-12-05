@@ -34,8 +34,8 @@ def serial_monitor_page():
 # Global Variable to store process ID
 pid = None
 
-# Define route for starting the serial monitor, accepting both GET and POST requests
-@app.route('/start_serial_monitor', methods=['GET', 'POST'])
+# Define route for starting the serial monitor
+@app.route('/start_serial_monitor', methods=['POST'])
 def start_serial_monitor():
     global pid
     print("STARTING...")
@@ -55,8 +55,7 @@ def start_serial_monitor():
     #return jsonify({'message': "Started serial monitor", 'csv_path': csv_path})
     return "Done"
 
-# Stop Serial Monitor
-@app.route('/stop_serial_monitor', methods=['GET', 'POST'])
+@app.route('/stop_serial_monitor', methods=['POST'])
 def stop_serial_monitor():
     global pid
     print("STOPPING...")
@@ -65,16 +64,26 @@ def stop_serial_monitor():
         try:
             # Send the SIGTERM signal to the process
             os.kill(pid, signal.SIGTERM)
-    #        message = "Stopped serial monitor"
+        #    message = "Stopped serial monitor"
         except Exception as e:
             print(f"Failed to stop process: {e}")
-    #        message = f"Failed to stop serial monitor: {e}"
+        #    message = f"Failed to stop serial monitor: {e}"
     else:
         print("No process ID found.")
     #    message = "No process ID found"
-    #return jsonify({'message': message, 'csv_path': session.get('csv_path')})
-    return "Done"
+    return jsonify({'csv_path': session.get('csv_path')})
 
+@app.route('/download_csv', methods=['POST'])
+def download_csv():
+    # Get the CSV filename from the form data
+    csv_filename = request.form['csv_filename']
+    csv_path = os.path.join(os.getcwd(), f"{csv_filename}.csv")
+    # Check if file exists
+    if os.path.exists(csv_path):
+        # Send file for download
+        return send_from_directory(directory=os.getcwd(), path=f"{csv_filename}.csv", as_attachment=True)
+    else:
+        return "File not found."
 # If this script is run directly (not imported)
 if __name__ == '__main__':
     app.run()

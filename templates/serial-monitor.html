@@ -27,25 +27,13 @@
     <!--Header for CSV management section-->
     <h2>CSV</h2>
     <!--Button to download the CSV file-->
-    <form id="csvForm" action="" method="POST">
+    <form id="csvForm" action="/download_csv" method="POST">
         <div2>
             <!--Label and input for CSV filename-->
             <label for="csv_filename">Enter CSV Filename to be downloaded: </label>
             <input type="text" id="csv_filename" name="csv_filename"></input>
             <span>.csv</span>
         </div2>
-        <!--Start and Stop buttons-->
         <input type="submit" name="download_csv" value="Download CSV File">
     </form>
-    <!--Header for Graphing section-->
-    <h2>Graphing</h2>
-        <a href="/">
-            <button>Create Graph</button>
-        </a>
-        <a href="/">
-            <button>Save Graph to Database</button>
-        </a>
-        <a href="/">
-            <button>Open Graph Database</button>
-        </a>
 {% endblock %}
