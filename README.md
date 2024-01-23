@@ -7,6 +7,6 @@ This repository is for programs related to data acquisition, collection, parsing
 
 It's also the **BEST** repository in the history of Polar Robotics!
 
-If you are reading this, you probably already know why you are here and what you need. If not, refer to `Data Acquisition.md` under the `PR-Docs` repository.
+If you are reading this, you probably already know why you are here and what you need. If not, refer to the `data-aq` branch under the `PR-Docs` repository.
 
 x CGH

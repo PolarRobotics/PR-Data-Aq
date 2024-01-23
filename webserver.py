@@ -16,9 +16,11 @@ app.secret_key = 'rhysisfine69'
 app.debug = True
 
 # This is where the path for the uploads is defined
-app.config['FLASKFILEMANAGER_FILE_PATH '] = 'tmp-webapp-uploads'
+app.config['FLASKFILEMANAGER_FILE_PATH'] = 'tmp-webapp-uploads'
 file_manager_app = flaskfilemanager.filemanager.filemanager_blueprint
-app.register_blueprint(file_manager_app, url_prefix='/file_manager_app')
+app.register_blueprint(file_manager_app, name=flaskfilemanager, url_prefix='/file_manager_app')
+config_json_path = os.path.join(app.root_path, 'static/config/filemanager.config.json')
+flaskfilemanager.init(app, custom_config_json_path=config_json_path)
 
 #
 # ROUTES OF MAIN WEB PAGES
