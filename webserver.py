@@ -4,32 +4,57 @@
 # Import necessary libraries (Python modules)
 import os
 import signal
-from flask import Flask, render_template, request, session, send_from_directory, jsonify
+from flask import Flask, render_template, request, session, send_from_directory, jsonify, url_for
 from werkzeug.exceptions import abort
 from static.py import serial_monitor
 from multiprocessing import Process
+import flaskfilemanager
 
 # Initialize Flask app with secret key and debug mode
 app = Flask(__name__)
 app.secret_key = 'rhysisfine69'
 app.debug = True
 
-# Define route for the home/index page
+# This is where the path for the uploads is defined
+app.config['FLASKFILEMANAGER_FILE_PATH '] = 'tmp-webapp-uploads'
+file_manager_app = flaskfilemanager.filemanager.filemanager_blueprint
+app.register_blueprint(file_manager_app, url_prefix='/file_manager_app')
+
+#
+# ROUTES OF MAIN WEB PAGES
+#
+
+# Home Page
 @app.route('/')
 def index_page():
     return render_template('index.html')
 
-# Define route for the favicon
+# Favicon
 @app.route('/favicon.ico')
 def favicon():
     # Send the favicon file with the correct MIME type
     return send_from_directory(os.path.join(app.root_path, 'static'),
         'favicon.ico',mimetype='image/vnd.microsoft.icon')
 
-# Define route for the serial monitor page
+# Serial Monitor
 @app.route('/serial_monitor')
 def serial_monitor_page():
     return render_template('serial-monitor.html')
+
+# File Manager
+@app.route('/file_manager')
+def file_manager():
+    filemanager_link = url_for('flaskfilemanager.index')
+    return render_template('file-manager.html', filemanager_link=filemanager_link)
+
+# Graphing
+@app.route('/graphing')
+def graphing():
+    return render_template('graphing.html')
+
+#
+#  ROUTES RELATED TO SERIAL MONITOR
+#
 
 # Global Variable to store process ID
 pid = None
@@ -84,6 +109,7 @@ def download_csv():
         return send_from_directory(directory=os.getcwd(), path=f"{csv_filename}.csv", as_attachment=True)
     else:
         return "File not found."
+
 # If this script is run directly (not imported)
 if __name__ == '__main__':
     app.run()

@@ -1,8 +1,17 @@
 {% extends 'base.html' %}
 
 {% block content %}
+    <br>
+    <h1>Welcome to the Polar Robotics Web Interface!</h1>
+    <a>This database</a>
     <h2>Programs</h2>
     <a href="serial_monitor">
         <button>Serial Monitor to CSV</button>
+    </a>
+    <a href="/file_manager">
+        <button>File Manager</button>
+    </a>
+    <a href="/graphing">
+        <button>Graphing</button>
     </a>
 {% endblock %}
