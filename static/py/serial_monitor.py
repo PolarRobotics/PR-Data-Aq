@@ -40,8 +40,8 @@ def main(csv_filename):
         )
 
     # Input for csv filename
-    csvName = ""
-    csvName = csv_filename
+    csvName = "tmp-webapp-uploads/"
+    csvName += csv_filename
     csvName += ".csv"
 
     # Clear all existing data in opened file

@@ -15,11 +15,14 @@ app = Flask(__name__)
 app.secret_key = 'rhysisfine69'
 app.debug = True
 
-# This is where the path for the uploads is defined
+# Rich File Manager shit
+# Configure default file path for Rich File Manager
 app.config['FLASKFILEMANAGER_FILE_PATH'] = 'tmp-webapp-uploads'
 file_manager_app = flaskfilemanager.filemanager.filemanager_blueprint
 app.register_blueprint(file_manager_app, name=flaskfilemanager, url_prefix='/file_manager_app')
 config_json_path = os.path.join(app.root_path, 'static/config/filemanager.config.json')
+
+# Initalize Rich File Manager
 flaskfilemanager.init(app, custom_config_json_path=config_json_path)
 
 #
@@ -77,9 +80,8 @@ def start_serial_monitor():
     # Store the process ID and CSV path
     pid = p.pid
     print(f"Started process with ID {pid}")
-    csv_path = os.path.join(os.getcwd(), f"{csv_filename}.csv")
+    csv_path = f"/{csv_filename}.csv"
     session['csv_path'] = csv_path
-    #return jsonify({'message': "Started serial monitor", 'csv_path': csv_path})
     return "Done"
 
 @app.route('/stop_serial_monitor', methods=['POST'])

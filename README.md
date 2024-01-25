@@ -4,6 +4,7 @@
 |-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|
 
 This repository is for programs related to data acquisition, collection, parsing, and viewing.
+The branch `main` that you are on has the entire Raspberry Pi webserver and everything needed to properly collect data with it.
 
 It's also the **BEST** repository in the history of Polar Robotics!
 
