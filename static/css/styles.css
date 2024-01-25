@@ -1,8 +1,10 @@
 html, body {
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    text-shadow: 2px 2px 5px rgb(0, 0, 0);
+    color: white;
     margin: 0;
     padding: 0;
-    background-color: #f0f0f0;
+    background-color: #222222;
 }
 
 header {
@@ -10,7 +12,7 @@ header {
     align-items: center;
     justify-content: space-between;
     padding: 10px;
-    background-color: chocolate;
+    background-color: black;
 }
 
 #favicon {
@@ -21,11 +23,31 @@ header {
 
 h1 {
     margin: 0;
-    color: #333;
+    text-shadow: 3px 0px 0px rgb(0, 0, 0);
+    color: orange;
+}
+
+header h1 {
+    text-shadow: 0px 0px 10px rgb(255, 77, 0);
 }
 
 h2 {
-    color: #333;
+    color: darkorange;
+    text-shadow: 3px 0px 0px rgb(0, 0, 0);
+    margin: 10px 0;
+}
+
+h3 {
+    color: orangered;
+    text-shadow: 3px 0px 0px rgb(0, 0, 0);
+    margin: 10px 0;
+}
+
+hr {
+    border: none;
+    height: 2px;
+    background-color: #333;
+    margin: 10px 0;
 }
 
 .container {
@@ -35,18 +57,24 @@ h2 {
 }
 
 div2 {
+    color: white;
     display: flex; 
     align-items: center;
 }
 
 a {
+    color: white;
     text-decoration: none;
 }
 
 button, input[type="submit"] {
-    background-color: #4CAF50;
+    color: orange;
+    background-color: black;
+    text-shadow: 0px 0px 10px rgb(255, 77, 0);
     border: none;
-    color: white;
+    text-decoration: none;
+    margin-right: 15px;
+    transition: transform 0.3s ease-in-out;
     padding: 15px 32px;
     text-align: center;
     text-decoration: none;
@@ -54,6 +82,11 @@ button, input[type="submit"] {
     font-size: 16px;
     margin: 4px 2px;
     cursor: pointer;
+    transition: transform 0.3s ease-in-out;
+}
+
+button:active, input[type="submit"] {
+    transform: scale(0.9);
 }
 
 form input[type="text"] {
@@ -79,9 +112,16 @@ nav {
 }
 
 nav a {
-    color: black;
-    border: 2px solid #000000;
-    padding: 5px;
+    color: orange;
+    background-color: black;
+    text-shadow: 0px 0px 10px rgb(255, 77, 0);
+    border: none;
+    padding: 10px 20px;
     text-decoration: none;
     margin-right: 15px;
+    transition: transform 0.3s ease-in-out;
+}
+
+nav a:active {
+    transform: scale(0.9);
 }
