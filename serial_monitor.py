@@ -49,6 +49,11 @@ while 1:
     # Collect Data from ESP32
     rx_data = ser.readline()
 
+    # Write data to terminal
+    write_data = rx_data.decode("utf-8")[:-1]
+    now = datetime.datetime.now()
+    print(now.time() + write_data)
+
     # Write to CSV
     with open(csvName, newline='',mode='a') as csvFile:
         writer = csv.writer(csvFile, delimiter=',', escapechar=' ', quoting=csv.QUOTE_NONE)
