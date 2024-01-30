@@ -15,10 +15,13 @@ app = Flask(__name__)
 app.secret_key = 'rhysisfine69'
 app.debug = True
 
+# Stack overflow guy says this fixes bugs
+app.config['JSONIFY_PRETTYPRINT_REGULAR'] = False
+
 # Rich File Manager shit
 # Configure default file path for Rich File Manager
 app.config['FLASKFILEMANAGER_FILE_PATH'] = 'tmp-webapp-uploads'
-file_manager_app = flaskfilemanager.filemanager.filemanager_blueprint
+file_manager_app= flaskfilemanager.filemanager.filemanager_blueprint
 app.register_blueprint(file_manager_app, name=flaskfilemanager, url_prefix='/file_manager_app')
 config_json_path = os.path.join(app.root_path, 'static/config/filemanager.config.json')
 
@@ -51,6 +54,11 @@ def serial_monitor_page():
 def file_manager():
     filemanager_link = url_for('flaskfilemanager.index')
     return render_template('file-manager.html', filemanager_link=filemanager_link)
+
+# for testing stupid download bug
+@app.route('/filemanagerdirect')
+def filemanagerdirect():
+    return render_template(os.path.join(app.root_path, 'static/flaskfilemanager/RichFilemanager/index.html'))
 
 # Graphing
 @app.route('/graphing')
