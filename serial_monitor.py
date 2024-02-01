@@ -1,4 +1,5 @@
 import serial
+import os
 import csv
 import datetime
 
@@ -14,7 +15,7 @@ def csv_format(rx_data, constant):
 
 
 ser = serial.Serial(
-        '/dev/ttyUSB1', 
+        '/dev/ttyUSB0', 
         baudrate = 115200, 
         parity   = serial.PARITY_NONE, 
         stopbits = serial.STOPBITS_ONE, 
@@ -25,16 +26,22 @@ ser = serial.Serial(
 linesWritten = 0
 csvName = ""
 
-print("\033[32mPOLAR ROBOTICS DATA ACQUISITION v1.0")
+print("\n\033[32mPOLAR ROBOTICS DATA ACQUISITION v1.1")
+print("\033[97mSerial Monitor to CSV")
+print("Takes data from a serial monitor input and converts to CSV format.")
+print("Documentation is located in PR-Docs repo.\n")
 
-# Input for csv filename
-print("\033[32mEnter name of file you want data outputted to: \033[97m")
-csvName = input()
-csvName += ".csv"
+while 1:
+    # Input for csv filename
+    print("\033[32mEnter name of CSV file (without .csv): \033[97m", end = "")
+    csvName = input()
+    csvName += ".csv"
 
-# Clear all existing data in opened file
-f = open(csvName, "w+")
-f.close()
+    # Check if a file with that name already exists
+    if os.path.exists(csvName):
+        print("\033[31mWarning: File {} already exists!\033[97m".format(csvName))
+    else: 
+        break
 
 ## Write Headers
 # Duplicate is not typo, the first one eliminates readline starting in the middle of text
@@ -52,7 +59,7 @@ while 1:
     # Write data to terminal
     write_data = rx_data.decode("utf-8")[:-1]
     now = datetime.datetime.now()
-    print(now.time() + write_data)
+    print(str(now.time()) + write_data)
 
     # Write to CSV
     with open(csvName, newline='',mode='a') as csvFile:
