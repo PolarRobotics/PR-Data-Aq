@@ -1,10 +1,9 @@
 # Flask.py - Corbin Hibler - 2023-11-10
 # Python webserver backend for Data Acquisition project, using Flask app and library.
 
-# Import necessary libraries (Python modules)
 import os
 import signal
-from flask import Flask, render_template, request, session, send_from_directory, jsonify, url_for
+from flask import Flask, render_template, request, session, send_from_directory, jsonify, url_for, redirect
 from werkzeug.exceptions import abort
 from static.py import serial_monitor
 from multiprocessing import Process
@@ -18,7 +17,7 @@ app.debug = True
 # Stack overflow guy says this fixes bugs
 app.config['JSONIFY_PRETTYPRINT_REGULAR'] = False
 
-# Rich File Manager shit
+# Rich File Manager stuff
 # Configure default file path for Rich File Manager
 app.config['FLASKFILEMANAGER_FILE_PATH'] = 'tmp-webapp-uploads'
 file_manager_app= flaskfilemanager.filemanager.filemanager_blueprint
@@ -58,7 +57,7 @@ def file_manager():
 # for testing stupid download bug
 @app.route('/filemanagerdirect')
 def filemanagerdirect():
-    return render_template(os.path.join(app.root_path, 'static/flaskfilemanager/RichFilemanager/index.html'))
+    return redirect(url_for('flaskfilemanager.index'))
 
 # Graphing
 @app.route('/graphing')
