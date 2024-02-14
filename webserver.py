@@ -7,9 +7,9 @@ from flask import Flask, render_template, request, session, send_from_directory,
 from werkzeug.exceptions import abort
 from static.py import serial_monitor
 from multiprocessing import Process
-import flaskfilemanager
 
 # Initialize Flask app with secret key and debug mode
+dir_path = os.path.join(os.path.dirname(os.path.abspath(__file__)),'static')
 app = Flask(__name__)
 app.secret_key = 'rhysisfine69'
 app.debug = True
@@ -17,15 +17,10 @@ app.debug = True
 # Stack overflow guy says this fixes bugs
 app.config['JSONIFY_PRETTYPRINT_REGULAR'] = False
 
-# Rich File Manager stuff
-# Configure default file path for Rich File Manager
-app.config['FLASKFILEMANAGER_FILE_PATH'] = 'tmp-webapp-uploads'
-file_manager_app= flaskfilemanager.filemanager.filemanager_blueprint
-app.register_blueprint(file_manager_app, name=flaskfilemanager, url_prefix='/file_manager_app')
-config_json_path = os.path.join(app.root_path, 'static/config/filemanager.config.json')
+# Rich Filemanager blueprint
+from File import bluePrint as fileBluePrint
+app.register_blueprint(fileBluePrint)
 
-# Initalize Rich File Manager
-flaskfilemanager.init(app, custom_config_json_path=config_json_path)
 
 #
 # ROUTES OF MAIN WEB PAGES
@@ -51,13 +46,7 @@ def serial_monitor_page():
 # File Manager
 @app.route('/file_manager')
 def file_manager():
-    filemanager_link = url_for('flaskfilemanager.index')
-    return render_template('file-manager.html', filemanager_link=filemanager_link)
-
-# for testing stupid download bug
-@app.route('/filemanagerdirect')
-def filemanagerdirect():
-    return redirect(url_for('flaskfilemanager.index'))
+    return render_template('filemanager.html')
 
 # Graphing
 @app.route('/graphing')
@@ -123,4 +112,4 @@ def download_csv():
 
 # If this script is run directly (not imported)
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=True)
